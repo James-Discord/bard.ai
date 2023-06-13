@@ -19,7 +19,7 @@ app.get('/chatgpt', async (req, res) => {
       stop: ['Human:', 'AI:']
     }, {
       headers: {
-        'Authorization': 'Bearer pk-fAahQonrhkSdbrUQAenJgmNbtCSpmpeKTJewTcgnUbeRFkRa',
+        'Authorization': 'Bearer **GO TO https://discord.gg/pawan AND GENERATE AN API AND REPLACE ALL THIS TEXT**',
         'Content-Type': 'application/json'
       }
     });
