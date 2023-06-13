@@ -1,0 +1,15 @@
+{
+  "dependencies": {
+    "@xelcior/bard-api": "^1.0.1",
+    "axios": "^1.4.0",
+    "better-sqlite3": "^8.4.0",
+    "crypto": "^1.0.1",
+    "discord.js": "13.15",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "open": "^9.1.0",
+    "puppeteer": "^20.6.0",
+    "quick.db": "^9.1.6",
+    "quickdb": "^1.0.5"
+  }
+}
