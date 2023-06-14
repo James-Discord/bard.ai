@@ -7,17 +7,17 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 
-let sessionToken = '';
+let sessionToken = getSessionToken();
 
 function getSessionToken() {
+  let token = '';
   try {
-    sessionToken = fs.readFileSync('sessionToken.txt', 'utf8').trim();
+    token = fs.readFileSync('sessionToken.txt', 'utf8').trim();
   } catch (error) {
     console.error('Error reading session token:', error);
   }
+  return token;
 }
-
-getSessionToken();
 
 app.get('/answer', async (req, res) => {
   try {
