@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const fs = require('fs');
 const bardapi = require('@xelcior/bard-api');
-
+require('dotenv').config();
 
 const app = express();
 app.use(express.json());
@@ -27,7 +27,7 @@ app.get('/answer', async (req, res) => {
       return;
     }
 
-    const _bard = new bardapi();
+    const _bard = new bardapi({ sessionToken });
     const answer = await _bard.getAnswer(question);
     res.json({ answer });
   } catch (error) {
@@ -53,7 +53,7 @@ app.all('/ask-gpt', async (req, res) => {
       ]
     }, {
       headers: {
-        'Authorization': 'Bearer pk-**APIKEY**',
+        'Authorization': `Bearer ${process.env.API_TOKEN}`,
         'Content-Type': 'application/json'
       }
     });
