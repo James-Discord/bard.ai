@@ -40,6 +40,30 @@ client.on('messageCreate', async (message) => {
       console.error('Error fetching answer:', error.message);
       message.channel.send('Sorry, an error occurred while fetching the answer.');
     }
+  } else if (command === 'ask-gpt') {
+    // Send the question to the Express API endpoint
+    try {
+      const response = await axios.get(`http://localhost:3000/ask-gpt?question=${encodeURIComponent(question)}`);
+      const answer = response.data.answer;
+
+      // Check if the answer is a non-empty string
+      if (typeof answer === 'string' && answer.trim() !== '') {
+        // Create an embed to display the question and answer
+        const embed = new Discord.MessageEmbed()
+          .setColor('#0099ff')
+          .setTitle('ChatGPT Answer')
+          .setDescription(answer)
+          .setAuthor('ChatGPT', 'https://1000logos.net/wp-content/uploads/2023/02/ChatGPT-Logo.jpg')
+          .setTimestamp();
+
+        message.channel.send({ embeds: [embed] });
+      } else {
+        message.channel.send('Sorry, I could not generate an answer with ChatGPT.');
+      }
+    } catch (error) {
+      console.error('Error fetching answer from ChatGPT:', error.message);
+      message.channel.send('Sorry, an error occurred while fetching the answer from ChatGPT.');
+    }
   }
 });
 
