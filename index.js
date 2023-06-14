@@ -1,6 +1,8 @@
 const express = require('express');
 const axios = require('axios');
 const fs = require('fs');
+const bardapi = require('@xelcior/bard-api');
+
 
 const app = express();
 app.use(express.json());
@@ -51,7 +53,7 @@ app.all('/ask-gpt', async (req, res) => {
       ]
     }, {
       headers: {
-        'Authorization': `Bearer ${sessionToken}`,
+        'Authorization': 'Bearer pk-**APIKEY**',
         'Content-Type': 'application/json'
       }
     });
