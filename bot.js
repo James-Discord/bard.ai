@@ -67,4 +67,4 @@ client.on('messageCreate', async (message) => {
   }
 });
 
-client.login('CLIENT-TOKEN-HERE');
+client.login('CLIENT-TOKEN-HERE1');
