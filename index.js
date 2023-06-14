@@ -7,17 +7,6 @@ require('dotenv').config();
 const app = express();
 app.use(express.json());
 
-let sessionToken = getSessionToken();
-
-function getSessionToken() {
-  let token = '';
-  try {
-    token = fs.readFileSync('sessionToken.txt', 'utf8').trim();
-  } catch (error) {
-    console.error('Error reading session token:', error);
-  }
-  return token;
-}
 
 app.get('/answer', async (req, res) => {
   try {
@@ -27,7 +16,13 @@ app.get('/answer', async (req, res) => {
       return;
     }
 
-    const _bard = new bardapi({ sessionToken });
+    const sessionToken = await getSessionToken();
+    if (!sessionToken) {
+      res.status(500).json({ error: 'Session token not found' });
+      return;
+    }
+
+    const _bard = new bardapi(sessionToken);
     const answer = await _bard.getAnswer(question);
     res.json({ answer });
   } catch (error) {
@@ -35,6 +30,7 @@ app.get('/answer', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while fetching the answer' });
   }
 });
+
 
 app.all('/ask-gpt', async (req, res) => {
   try {
@@ -78,6 +74,21 @@ app.all('/ask-gpt', async (req, res) => {
     res.status(500).json({ error: 'An error occurred while fetching the answer from GPT' });
   }
 });
+
+function getSessionToken() {
+  return new Promise((resolve, reject) => {
+    fs.readFile('session_token.log', 'utf8', (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        const sessionToken = data.trim().split('\n')[0];
+        resolve(sessionToken || null);
+      }
+    });
+  });
+}
+
+
 
 app.listen(3000, () => {
   console.log('Server listening on port 3000');
