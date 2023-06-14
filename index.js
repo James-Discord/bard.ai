@@ -1,40 +1,9 @@
 const express = require('express');
 const axios = require('axios');
-const bardapi = require('@xelcior/bard-api');
-const fs = require('fs');
 
 const app = express();
 app.use(express.json());
 
-// ChatGPT Route
-app.get('/chatgpt', async (req, res) => {
-  try {
-    const { ask } = req.query;
-
-    const response = await axios.post('https://api.pawan.krd/v1/completions', {
-      model: 'text-davinci-003',
-      prompt: `Human: ${ask}\nAI:`,
-      temperature: 0.7,
-      max_tokens: 256,
-      stop: ['Human:', 'AI:']
-    }, {
-      headers: {
-        'Authorization': 'Bearer **GO TO https://discord.gg/pawan AND GENERATE AN API AND REPLACE ALL THIS TEXT**',
-        'Content-Type': 'application/json'
-      }
-    });
-
-    const { choices } = response.data;
-    const answer = choices[0].text.trim();
-
-    res.json({ answer });
-  } catch (error) {
-    console.error('Error fetching answer:', error.message);
-    res.status(500).json({ error: 'An error occurred while fetching the answer' });
-  }
-});
-
-// Bard API Route
 app.get('/answer', async (req, res) => {
   try {
     const question = req.query.question;
@@ -58,13 +27,56 @@ app.get('/answer', async (req, res) => {
   }
 });
 
-// Error handler middleware
-app.use((err, req, res, next) => {
-  console.error('Error:', err);
-  res.status(500).json({ error: 'Internal server error' });
+app.all('/ask-gpt', async (req, res) => {
+  try {
+    const question = req.query.question || req.body.question;
+    if (!question) {
+      res.status(400).json({ error: 'Missing question parameter' });
+      return;
+    }
+
+    const response = await axios.post('https://api.pawan.krd/v1/chat/completions', {
+      model: 'gpt-3.5-turbo',
+      max_tokens: 100,
+      messages: [
+        { role: 'system', content: 'You are a helpful assistant.' },
+        { role: 'user', content: question }
+      ]
+    }, {
+      headers: {
+        'Authorization': 'Bearer pk-***[OUR_API_KEY]***',
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.status !== 200) {
+      console.error('Error response from GPT API:', response.status);
+      res.status(500).json({ error: 'An error occurred while fetching the answer from GPT' });
+      return;
+    }
+
+    const { choices } = response.data;
+    if (!choices || choices.length === 0) {
+      console.error('No choices received from GPT API');
+      res.status(500).json({ error: 'An error occurred while fetching the answer from GPT' });
+      return;
+    }
+
+    const answer = choices[0].message.content;
+
+    if (!answer) {
+      console.error('No answer received from GPT API');
+      res.status(500).json({ error: 'An error occurred while fetching the answer from GPT' });
+      return;
+    }
+
+    res.json({ answer });
+  } catch (error) {
+    console.error('Error fetching answer from GPT:', error.message);
+    res.status(500).json({ error: 'An error occurred while fetching the answer from GPT' });
+  }
 });
 
-// Helper function to get session token
 function getSessionToken() {
   return new Promise((resolve, reject) => {
     fs.readFile('session_token.log', 'utf8', (err, data) => {
@@ -77,6 +89,12 @@ function getSessionToken() {
     });
   });
 }
+
+// Error handler middleware
+app.use((err, req, res, next) => {
+  console.error('Error:', err);
+  res.status(500).json({ error: 'Internal server error' });
+});
 
 app.listen(3000, () => {
   console.log('Express API server is running on port 3000');
