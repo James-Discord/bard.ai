@@ -75,7 +75,7 @@ app.all('/ask-gpt', async (req, res) => {
   }
 });
 
-app.all('/ask-gpt', async (req, res) => {
+app.all('/ask-gpt-test', async (req, res) => {
   try {
     const question = req.query.question || req.body.question;
     if (!question) {
