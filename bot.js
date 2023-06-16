@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const axios = require('axios');
+require('dotenv').config(); // Load environment variables from .env file
 
 const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES] });
 const prefix = '!'; // Command prefix
@@ -64,7 +65,31 @@ client.on('messageCreate', async (message) => {
       console.error('Error fetching answer from ChatGPT:', error.message);
       message.channel.send('Sorry, an error occurred while fetching the answer from ChatGPT.');
     }
+  } else if (command === 'ask-gpt-unrestricted') {
+    // Send the question to the Express API endpoint
+    try {
+      const response = await axios.get(`http://localhost:3000/ask-gpt-uncensored?question=${encodeURIComponent(question)}`);
+      const answer = response.data.answer;
+
+      // Check if the answer is a non-empty string
+      if (typeof answer === 'string' && answer.trim() !== '') {
+        // Create an embed to display the question and answer
+        const embed = new Discord.MessageEmbed()
+          .setColor('#0099ff')
+          .setTitle('Unrestricted ChatGPT Answer')
+          .setDescription(answer)
+          .setAuthor('ChatGPT (Unrestricted)', 'https://1000logos.net/wp-content/uploads/2023/02/ChatGPT-Logo.jpg')
+          .setTimestamp();
+
+        message.channel.send({ embeds: [embed] });
+      } else {
+        message.channel.send('Sorry, I could not generate an answer with unrestricted ChatGPT.');
+      }
+    } catch (error) {
+      console.error('Error fetching answer from unrestricted ChatGPT:', error.message);
+      message.channel.send('Sorry, an error occurred while fetching the answer from unrestricted ChatGPT.');
+    }
   }
 });
 
-client.login('CLIENT-TOKEN-HERE1');
+client.login(process.env.DISCORD_TOKEN);
