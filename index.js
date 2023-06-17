@@ -128,7 +128,7 @@ app.all('/code-gpt', async (req, res) => {
 
     const response = await axios.post('https://api.pawan.krd/v1/chat/completions', {
       model: 'code-davinci-002',
-      max_tokens: 250,
+      max_tokens: 270,
       messages: [
         { role: 'system', content: 'You are a helpful assistant who helps the users code but you only give them the code and dont explain it' },
         { role: 'user', content: question }
