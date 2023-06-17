@@ -12,6 +12,40 @@ const _bard = new bardapi("AITHING");
 const app = express();
 app.use(express.json());
 
+app.get('/dalle', async (req, res) => {
+  try {
+    const prompt = req.query.prompt;
+
+    if (!prompt) {
+      res.status(400).json({ error: 'Missing prompt parameter' });
+      return;
+    }
+
+    const response = await axios.post('https://api.pawan.krd/v1/images/generations', {
+      prompt,
+      n: 1,
+      size: '1024x1024'
+    }, {
+      headers: {
+        'Authorization': `Bearer pk-LXEmOjFAwiHSrbNaXhuHrfsHFDpKTPyEjmYacJMGGisagWDO`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.status !== 200) {
+      console.error('Error response from DALL·E API:', response.status);
+      res.status(500).json({ error: 'An error occurred while generating the image with DALL·E' });
+      return;
+    }
+
+    const image = response.data[0];
+    res.send(image);
+  } catch (error) {
+    console.error('Error generating image with DALL·E:', error);
+    res.status(500).json({ error: 'An error occurred while generating the image with DALL·E' });
+  }
+});
+
 app.all('/ask-gpt', async (req, res) => {
   try {
     const question = req.query.question || req.body.question;
