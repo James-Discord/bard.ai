@@ -1,7 +1,8 @@
 const express = require('express');
 const axios = require('axios');
 const fs = require('fs');
-import Bard, { askAI } from "bard-ai";
+const Bard = require('bard-ai').default;
+const { askAI } = require('bard-ai');
 require('dotenv').config();
 
 
