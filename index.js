@@ -3,20 +3,14 @@ const axios = require('axios');
 const fs = require('fs');
 require('dotenv').config();
 
+// Add the following line to import bard-api
 const bardapi = require('@xelcior/bard-api');
+
+// Create an instance of bard-api
+const _bard = new bardapi("XQinMAZ3iZK89i8Fw6QIiF8s6e3JYMhHB8B1d8z5f947l7sFWiIKnA0UGiMSMI6kui43Cw.");
 
 const app = express();
 app.use(express.json());
-
-const getSessionToken = () => {
-  try {
-    const sessionToken = fs.readFileSync('session_token.log', 'utf8').trim();
-    return sessionToken;
-  } catch (error) {
-    console.error('Error reading session token:', error);
-    return null;
-  }
-};
 
 app.all('/ask-gpt', async (req, res) => {
   try {
@@ -190,6 +184,7 @@ app.all('/code-gpt-mean', async (req, res) => {
   }
 });
 
+// Add the /bard-ai route
 app.all('/bard-ai', async (req, res) => {
   try {
     const question = req.query.question || req.body.question;
@@ -198,13 +193,6 @@ app.all('/bard-ai', async (req, res) => {
       return;
     }
 
-    const sessionToken = getSessionToken();
-    if (!sessionToken) {
-      res.status(500).json({ error: 'Failed to retrieve session token' });
-      return;
-    }
-
-    const _bard = new bardapi(sessionToken);
     const answer = await _bard.getAnswer(question);
     res.json({ answer });
   } catch (error) {
@@ -213,6 +201,7 @@ app.all('/bard-ai', async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
