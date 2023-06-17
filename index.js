@@ -155,9 +155,9 @@ let Bard;
         return;
       }
 
-      const BardAI = new Bard.Chat();
-      await BardAI.init(sessionToken);
-      const answer = await BardAI.ask(question);
+      const Bard = new Bard.Chat();
+      await Bard.init(sessionToken);
+      const answer = await Bard.ask(question);
 
       res.json({ answer });
     } catch (error) {
