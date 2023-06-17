@@ -20,7 +20,7 @@ client.on('messageCreate', async (message) => {
   if (command === 'ask') {
     // Send the question to the Express API endpoint
     try {
-      const response = await axios.get(`http://localhost:3000/answer?question=${encodeURIComponent(question)}`);
+      const response = await axios.get(`http://localhost:3000/bard-ai?question=${encodeURIComponent(question)}`);
       const answer = response.data.answer;
 
       // Check if the answer is a non-empty string
