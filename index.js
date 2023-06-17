@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const fs = require('fs');
-const { Bard } = require('bard-ai').default;
+const { default: Bard } = require('bard-ai')
 const { askAI } = require('bard-ai');
 require('dotenv').config();
 
