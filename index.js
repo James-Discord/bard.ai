@@ -7,7 +7,7 @@ require('dotenv').config();
 const bardapi = require('@xelcior/bard-api');
 
 // Create an instance of bard-api
-const _bard = new bardapi("XQinMAZ3iZK89i8Fw6QIiF8s6e3JYMhHB8B1d8z5f947l7sFWiIKnA0UGiMSMI6kui43Cw.");
+const _bard = new bardapi("AITHING");
 
 const app = express();
 app.use(express.json());
