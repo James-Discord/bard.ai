@@ -113,30 +113,6 @@ client.on('messageCreate', async (message) => {
       console.error('Error fetching answer from unrestricted CodeGPT:', error.message);
       message.channel.send('Sorry, an error occurred while fetching the answer from unrestricted CodeGPT.');
     }
-  } else if (command === 'is-this-ai') {
-    // Send the question to the Express API endpoint
-    try {
-      const response = await axios.get(`http://localhost:3000/is-this-ai?question=${encodeURIComponent(question)}`);
-      const answer = response.data.answer;
-
-      // Check if the answer is a non-empty string
-      if (typeof answer === 'string' && answer.trim() !== '') {
-        // Create an embed to display the question and answer
-        const embed = new Discord.MessageEmbed()
-          .setColor('#0099ff')
-          .setTitle('AI Identification')
-          .setDescription(answer)
-          .setAuthor('AI Identification', 'https://example.com/ai-identification-logo.png') // Replace with the actual AI Identification logo URL
-          .setTimestamp();
-
-        message.channel.send({ embeds: [embed] });
-      } else {
-        message.channel.send('Sorry, I could not identify if it is AI.');
-      }
-    } catch (error) {
-      console.error('Error fetching AI identification:', error.message);
-      message.channel.send('Sorry, an error occurred while fetching the AI identification.');
-    }
   }
 });
 
