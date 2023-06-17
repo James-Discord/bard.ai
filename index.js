@@ -3,11 +3,10 @@ const axios = require('axios');
 const fs = require('fs');
 require('dotenv').config();
 
-let Bard;
 (async () => {
   const module = await import('bard-ai');
-  Bard = module.default;
-  askAI = module.askAI;
+  const BardModule = module.default;
+  const askAI = module.askAI;
 
   const app = express();
   app.use(express.json());
@@ -155,9 +154,9 @@ let Bard;
         return;
       }
 
-      const Bard = new Bard.Chat();
-      await Bard.init(sessionToken);
-      const answer = await Bard.ask(question);
+      const bard = new BardModule.Chat();
+      await bard.init(sessionToken);
+      const answer = await bard.ask(question);
 
       res.json({ answer });
     } catch (error) {
