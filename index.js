@@ -7,6 +7,7 @@ let Bard;
 (async () => {
   const module = await import('bard-ai');
   Bard = module.default;
+  askAI = module.askAI;
 
   const app = express();
   app.use(express.json());
