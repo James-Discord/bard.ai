@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const fs = require('fs');
-const { Bard } = require("googlebard");
+import { Bard } from "googlebard";
 require('dotenv').config();
 
 const app = express();
