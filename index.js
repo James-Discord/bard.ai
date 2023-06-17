@@ -3,7 +3,7 @@ const axios = require('axios');
 const fs = require('fs');
 require('dotenv').config();
 
-const Bard = require('bard-ai');
+import Bard, { askAI } from "bard-ai";
 
 const app = express();
 app.use(express.json());
@@ -151,7 +151,6 @@ app.all('/bard-ai', async (req, res) => {
       return;
     }
 
-    const Bard = (await import('bard-ai')).default;
     const BardAI = new Bard.Chat();
     await BardAI.init(sessionToken);
     const answer = await BardAI.ask(question);
