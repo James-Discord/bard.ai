@@ -24,7 +24,7 @@ app.get('/dalle', async (req, res) => {
     const response = await axios.post('https://api.pawan.krd/v1/images/generations', {
       prompt,
       n: 1,
-      size: '1024x1024'
+      size: '1920x1080'
     }, {
       headers: {
         'Authorization': `Bearer pk-LXEmOjFAwiHSrbNaXhuHrfsHFDpKTPyEjmYacJMGGisagWDO`,
