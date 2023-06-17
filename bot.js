@@ -113,7 +113,7 @@ client.on('messageCreate', async (message) => {
       console.error('Error fetching answer from CodeGPT:', error.message);
       message.channel.send('Sorry, an error occurred while fetching the answer from CodeGPT.');
     }
-  } else if (command === 'ask-code-gpt-unrestricted') {
+  } else if (command === 'ask-code-gpt-mean') {
     // Send the question to the Express API endpoint
     try {
       const response = await axios.get(`http://localhost:3000/code-gpt-unrestricted?question=${encodeURIComponent(question)}`);
