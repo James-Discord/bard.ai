@@ -17,31 +17,7 @@ client.on('messageCreate', async (message) => {
   const [command, ...args] = message.content.slice(prefix.length).trim().split(' ');
   const question = args.join(' ');
 
-  if (command === 'ask') {
-    // Send the question to the Express API endpoint
-    try {
-      const response = await axios.get(`http://localhost:3000/bard-ai?question=${encodeURIComponent(question)}`);
-      const answer = response.data.answer;
-
-      // Check if the answer is a non-empty string
-      if (typeof answer === 'string' && answer.trim() !== '') {
-        // Create an embed to display the question and answer
-        const embed = new Discord.MessageEmbed()
-          .setColor('#0099ff')
-          .setTitle('Answer')
-          .setDescription(answer)
-          .setAuthor('Bard', 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Google_Bard_logo.svg/600px-Google_Bard_logo.svg.png?20230425130013')
-          .setTimestamp();
-
-        message.channel.send({ embeds: [embed] });
-      } else {
-        message.channel.send('Sorry, I could not find an answer to that question.');
-      }
-    } catch (error) {
-      console.error('Error fetching answer:', error.message);
-      message.channel.send('Sorry, an error occurred while fetching the answer.');
-    }
-  } else if (command === 'ask-gpt') {
+  if (command === 'ask-gpt') {
     // Send the question to the Express API endpoint
     try {
       const response = await axios.get(`http://localhost:3000/ask-gpt?question=${encodeURIComponent(question)}`);
