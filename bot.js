@@ -116,7 +116,7 @@ client.on('messageCreate', async (message) => {
   } else if (command === 'ask-code-gpt-mean') {
     // Send the question to the Express API endpoint
     try {
-      const response = await axios.get(`http://localhost:3000/code-gpt-unrestricted?question=${encodeURIComponent(question)}`);
+      const response = await axios.get(`http://localhost:3000/code-gpt-mean?question=${encodeURIComponent(question)}`);
       const answer = response.data.answer;
 
       // Check if the answer is a non-empty string
