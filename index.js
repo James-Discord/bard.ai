@@ -151,6 +151,7 @@ app.all('/bard-ai', async (req, res) => {
       return;
     }
 
+    const Bard = (await import('bard-ai')).default;
     const BardAI = new Bard.Chat();
     await BardAI.init(sessionToken);
     const answer = await BardAI.ask(question);
