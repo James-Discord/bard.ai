@@ -113,6 +113,30 @@ client.on('messageCreate', async (message) => {
       console.error('Error fetching answer from CodeGPT:', error.message);
       message.channel.send('Sorry, an error occurred while fetching the answer from CodeGPT.');
     }
+  } else if (command === 'ask-code-gpt-unrestricted') {
+    // Send the question to the Express API endpoint
+    try {
+      const response = await axios.get(`http://localhost:3000/code-gpt-unrestricted?question=${encodeURIComponent(question)}`);
+      const answer = response.data.answer;
+
+      // Check if the answer is a non-empty string
+      if (typeof answer === 'string' && answer.trim() !== '') {
+        // Create an embed to display the question and answer
+        const embed = new Discord.MessageEmbed()
+          .setColor('#0099ff')
+          .setTitle('CodeGPT (Unrestricted) Answer')
+          .setDescription(answer)
+          .setAuthor('CodeGPT (Unrestricted)', 'https://example.com/codegpt-unrestricted-logo.png') // Replace with the actual CodeGPT (Unrestricted) logo URL
+          .setTimestamp();
+
+        message.channel.send({ embeds: [embed] });
+      } else {
+        message.channel.send('Sorry, I could not generate an answer with unrestricted CodeGPT.');
+      }
+    } catch (error) {
+      console.error('Error fetching answer from unrestricted CodeGPT:', error.message);
+      message.channel.send('Sorry, an error occurred while fetching the answer from unrestricted CodeGPT.');
+    }
   }
 });
 
