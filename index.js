@@ -55,6 +55,49 @@ app.all('/ask-gpt', async (req, res) => {
   }
 });
 
+app.all('/is-this-ai', async (req, res) => {
+  try {
+    const question = req.query.question || req.body.question;
+    if (!question) {
+      res.status(400).json({ error: 'Missing question parameter' });
+      return;
+    }
+
+    const response = await axios.post('https://api.pawan.krd/v1/chat/completions', {
+      model: 'gpt-4',
+      max_tokens: 270,
+      messages: [
+        { role: 'system', content: 'You are a program that automatically detects if a sentence/paragraph has been written by AI like yourself or other ai' },
+        { role: 'user', content: question }
+      ]
+    }, {
+      headers: {
+        'Authorization': `Bearer ${process.env.API_TOKEN}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.status !== 200) {
+      console.error('Error response from GPT API:', response.status);
+      res.status(500).json({ error: 'An error occurred while fetching the answer from GPT' });
+      return;
+    }
+
+    const { choices } = response.data;
+    if (!choices || choices.length === 0) {
+      console.error('No choices received from GPT API');
+      res.status(500).json({ error: 'An error occurred while fetching the answer from GPT' });
+      return;
+    }
+
+    const answer = choices[0].message.content;
+    res.json({ answer });
+  } catch (error) {
+    console.error('Error fetching answer from GPT:', error);
+    res.status(500).json({ error: 'An error occurred while fetching the answer from GPT' });
+  }
+});
+
 app.all('/ask-gpt-uncensored', async (req, res) => {
   try {
     const question = req.query.question || req.body.question;
