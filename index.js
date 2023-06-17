@@ -3,11 +3,6 @@ const axios = require('axios');
 const fs = require('fs');
 require('dotenv').config();
 
-(async () => {
-  const module = await import('bard-ai');
-  const BardModule = module.default;
-  const askAI = module.askAI;
-
   const app = express();
   app.use(express.json());
 
@@ -140,30 +135,6 @@ require('dotenv').config();
     }
   });
 
-  app.all('/bard-ai', async (req, res) => {
-    try {
-      const question = req.query.question || req.body.question;
-      if (!question) {
-        res.status(400).json({ error: 'Missing question parameter' });
-        return;
-      }
-
-      const sessionToken = await getSessionToken();
-      if (!sessionToken) {
-        res.status(500).json({ error: 'Session token not found' });
-        return;
-      }
-
-      const bard = new BardModule.Chat();
-      await bard.init(sessionToken);
-      const answer = await bard.ask(question);
-
-      res.json({ answer });
-    } catch (error) {
-      console.error('Error fetching answer from Bard AI:', error);
-      res.status(500).json({ error: 'An error occurred while fetching the answer from Bard AI' });
-    }
-  });
 
   function getSessionToken() {
     return new Promise((resolve, reject) => {
