@@ -122,7 +122,7 @@ app.all('/ask-gpt', async (req, res) => {
       return;
     }
 
-    const response = await axios.post('https://free.churchless.tech', {
+    const response = await axios.post('https://free.churchless.tech/v1/chat/completions', {
       model: 'gpt-4',
       max_tokens: 2048,
       stream: true,
@@ -132,7 +132,7 @@ app.all('/ask-gpt', async (req, res) => {
       ]
     }, {
       headers: {
-        'Authorization': `Bearer MyDiscord`,
+        'Authorization': `Bearer ChatGPT-Hackers`,
         'Content-Type': 'application/json'
       }
     });
