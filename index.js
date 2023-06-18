@@ -122,7 +122,7 @@ app.all('/ask-gpt', async (req, res) => {
       return;
     }
 
-    const response = await axios.post('https://api.pawan.krd/unfiltered/v1', {
+    const response = await axios.post('https://free.churchless.tech', {
       model: 'gpt-4',
       max_tokens: 2048,
       stream: true,
@@ -132,7 +132,7 @@ app.all('/ask-gpt', async (req, res) => {
       ]
     }, {
       headers: {
-        'Authorization': `Bearer ${process.env.API_TOKEN}`,
+        'Authorization': `Bearer MyDiscord`,
         'Content-Type': 'application/json'
       }
     });
