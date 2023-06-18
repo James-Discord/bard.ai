@@ -42,7 +42,11 @@ async function generateGitHubUsernames(length, quantity) {
   });
 
   const check = async (username) => {
-    const res = await fetch(`https://api.github.com/users/${username}`);
+    const res = await fetch(`https://api.github.com/users/${username}`, {
+      headers: {
+        Authorization: `Bearer ${GITHUB_TOKEN}`,
+      },
+    });
     return res.status === 404; // If 404, the username doesn't exist
   };
 
