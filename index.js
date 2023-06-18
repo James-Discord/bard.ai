@@ -124,7 +124,7 @@ app.all('/ask-gpt', async (req, res) => {
 
     const response = await axios.post('https://api.pawan.krd/v1/chat/completions', {
       model: 'gpt-4',
-      max_tokens: 270,
+      max_tokens: 1000,
       messages: [
         { role: 'system', content: 'You are a helpful assistant, who remembers what people names identity and personality was' },
         { role: 'user', content: question }
