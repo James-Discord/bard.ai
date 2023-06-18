@@ -4,6 +4,7 @@ const fs = require('fs');
 const { createInterface } = require("readline");
 const { word } = require("slova");
 require('dotenv').config();
+const cheerio = require('cheerio');
 
 // Add the following line to import bard-api
 const bardapi = require('@xelcior/bard-api');
@@ -41,12 +42,17 @@ async function generateGitHubUsernames(length, quantity) {
   });
 
   const check = async (username) => {
-    const searchUrl = `https://github.com/search?q=${username}&type=users`;
-    const res = await fetch(searchUrl);
-    const html = await res.text();
-    const $ = cheerio.load(html);
-    const resultsText = $('.blankslate h3').text().trim();
-    return resultsText === '0 results' || resultsText === 'Your search did not match any users';
+    try {
+      const searchUrl = `https://github.com/search?q=${username}&type=users`;
+      const res = await fetch(searchUrl);
+      const html = await res.text();
+      const $ = cheerio.load(html);
+      const resultsText = $('.js-pjax-container .blankslate h3').text().trim();
+      return resultsText === '0 results' || resultsText === 'Your search did not match any users';
+    } catch (error) {
+      console.error(`[ERROR] ${username} returned an error:`, error);
+      return false;
+    }
   };
 
   const availableUsernames = [];
