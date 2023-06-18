@@ -10,6 +10,9 @@ const bardapi = require('@xelcior/bard-api');
 
 // Create an instance of bard-api
 const _bard = new bardapi("AITHING");
+const GITHUB_TOKEN = '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';
+
+
 
 const app = express();
 app.use(express.json());
