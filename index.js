@@ -1,7 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 const fs = require('fs');
-import { createInterface } from "node:readline/promises";
+const { createInterface } = require("readline");
 import { word } from "slova";
 require('dotenv').config();
 
