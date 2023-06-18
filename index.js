@@ -126,7 +126,7 @@ app.all('/ask-gpt', async (req, res) => {
       model: 'gpt-4',
       max_tokens: 270,
       messages: [
-        { role: 'system', content: 'You are a helpful assistant.' },
+        { role: 'system', content: 'You are a helpful assistant, who remembers what people names identity and personality was' },
         { role: 'user', content: question }
       ]
     }, {
