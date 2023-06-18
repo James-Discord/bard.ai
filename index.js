@@ -10,7 +10,6 @@ const bardapi = require('@xelcior/bard-api');
 
 // Create an instance of bard-api
 const _bard = new bardapi("AITHING");
-const GITHUB_TOKEN = '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';
 
 
 
@@ -46,8 +45,8 @@ async function generateGitHubUsernames(length, quantity) {
     const res = await fetch(searchUrl);
     const html = await res.text();
     const $ = cheerio.load(html);
-    const resultsCount = $('.codesearch-results h3').text().trim();
-    return resultsCount === '0 results';
+    const resultsText = $('.blankslate h3').text().trim();
+    return resultsText === '0 results' || resultsText === 'Your search did not match any users';
   };
 
   const availableUsernames = [];
