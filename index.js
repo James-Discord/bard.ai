@@ -95,7 +95,7 @@ app.get('/dalle', async (req, res) => {
       size: '1920x1080'
     }, {
       headers: {
-        'Authorization': `Bearer pk-LXEmOjFAwiHSrbNaXhuHrfsHFDpKTPyEjmYacJMGGisagWDO`,
+        'Authorization': `Bearer ${process.env.API_TOKEN}`,
         'Content-Type': 'application/json'
       }
     });
