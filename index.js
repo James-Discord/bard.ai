@@ -42,12 +42,12 @@ async function generateGitHubUsernames(length, quantity) {
   });
 
   const check = async (username) => {
-    const res = await fetch(`https://api.github.com/users/${username}`, {
-      headers: {
-        Authorization: `Bearer ${GITHUB_TOKEN}`,
-      },
-    });
-    return res.status === 404; // If 404, the username doesn't exist
+    const searchUrl = `https://github.com/search?q=${username}&type=users`;
+    const res = await fetch(searchUrl);
+    const html = await res.text();
+    const $ = cheerio.load(html);
+    const resultsCount = $('.codesearch-results h3').text().trim();
+    return resultsCount === '0 results';
   };
 
   const availableUsernames = [];
