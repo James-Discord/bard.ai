@@ -122,7 +122,7 @@ app.all('/ask-gpt', async (req, res) => {
       return;
     }
 
-    const response = await axios.post('https://api.pawan.krd/v1/chat/completions', {
+    const response = await axios.post('https://api.pawan.krd/v1', {
       model: 'gpt-4',
       max_tokens: 2048,
       messages: [
