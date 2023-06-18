@@ -14,6 +14,66 @@ const _bard = new bardapi("AITHING");
 const app = express();
 app.use(express.json());
 
+app.get('/github-usernamegen', async (req, res) => {
+  try {
+    const length = req.query.length ? parseInt(req.query.length) : 4;
+    const amount = req.query.amount ? parseInt(req.query.amount) : 10;
+
+    if (isNaN(length) || isNaN(amount)) {
+      res.status(400).json({ error: 'Invalid length or amount' });
+      return;
+    }
+
+    const availableUsernames = await generateGitHubUsernames(length, amount);
+    res.json({ usernames: availableUsernames });
+  } catch (error) {
+    console.error('Error generating GitHub usernames:', error);
+    res.status(500).json({ error: 'An error occurred while generating GitHub usernames' });
+  }
+});
+
+async function generateGitHubUsernames(length, quantity) {
+  const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  const check = async (username) => {
+    const res = await fetch(`https://api.github.com/users/${username}`);
+    return res.status === 404; // If 404, the username doesn't exist
+  };
+
+  const availableUsernames = [];
+
+  async function main(length, quantity) {
+    const wordNames = require('slova').word({
+      length,
+      amount: 1,
+    })();
+
+    try {
+      if (await check(wordNames[0])) {
+        availableUsernames.push(wordNames[0]);
+        console.log('[INFO]', `${wordNames[0]} is available on GitHub!`);
+      } else {
+        console.log('[INFO]', `${wordNames[0]} is not available on GitHub!`);
+      }
+    } catch (e) {
+      console.error('[ERROR]', `${wordNames[0]} returned an error!`);
+    }
+
+    if (availableUsernames.length !== quantity) return main(length, quantity);
+
+    return availableUsernames;
+  }
+
+  console.log('[INFO]', 'Fetching usernames may take some time, please wait...');
+  const result = await main(length, quantity);
+  rl.close();
+
+  return result;
+}
+
 app.get('/npm-namegen', async (req, res) => {
   try {
     const length = req.query.length ? parseInt(req.query.length) : 4;
