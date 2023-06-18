@@ -2,7 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const fs = require('fs');
 const { createInterface } = require("readline");
-import { word } from "slova";
+const { word } from "slova";
 require('dotenv').config();
 
 // Add the following line to import bard-api
