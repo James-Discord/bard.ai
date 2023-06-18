@@ -47,8 +47,8 @@ async function generateGitHubUsernames(length, quantity) {
       const res = await fetch(searchUrl);
       const html = await res.text();
       const $ = cheerio.load(html);
-      const resultsText = $('.js-pjax-container .blankslate h3').text().trim();
-      return resultsText === '0 results' || resultsText === 'Your search did not match any users';
+      const resultText = $('.codesearch-results p').text().trim();
+      return resultText === '0 Box-sc-g0xbh4-0 cgQapc';
     } catch (error) {
       console.error(`[ERROR] ${username} returned an error:`, error);
       return false;
